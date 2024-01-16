@@ -1,5 +1,5 @@
 class Map (
-    mapSize : MapSize,
+    private var mapSize : MapSize,
 ) {
     private val mapWidth : Int
     private val mapHeight : Int
@@ -21,5 +21,7 @@ class Map (
     {
 
     }
+
+    fun getMapSize(): MapSize = mapSize
 
 }

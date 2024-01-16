@@ -1,4 +1,6 @@
 fun main() {
+    val console = ConsoleWorker();
+
     println("""
     |Выберите размер карты:
     |1. Маленькая (10x10)
@@ -8,12 +10,12 @@ fun main() {
     """.trimMargin())
 
     var chosenMapSize = readln()
-    var answerInt : Int = consoleAnswerCheckerInt(chosenMapSize, 3)
+    var answerInt : Int = console.answerCheckerInt(chosenMapSize, 3)
     while(answerInt == -1)
     {
         println("Введите корректный ответ:")
         chosenMapSize = readln()
-        answerInt = consoleAnswerCheckerInt(chosenMapSize, 3)
+        answerInt = console.answerCheckerInt(chosenMapSize, 3)
     }
 
     val mapSize : MapSize = when(answerInt)
@@ -26,16 +28,5 @@ fun main() {
 
     val map = Map(mapSize)
 
-}
-
-fun consoleAnswerCheckerInt(answer: String, numberOfPoints : Int) : Int
-{
-    val numeric = answer.matches("-?\\d+(\\.\\d+)?".toRegex())
-
-    if(!numeric) return -1
-
-    val number = answer.toInt()
-    if(number > numberOfPoints)
-        return -1
-    return number
+    console.printMap(map.getMapSize())
 }
