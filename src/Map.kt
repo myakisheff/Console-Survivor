@@ -4,6 +4,8 @@ class Map (
     private val mapWidth : Int
     private val mapHeight : Int
     private val map: Array<Array<MapCellEntity>>
+    private val resourceFrequency : SpawnFrequency
+    private val enemyFrequency : SpawnFrequency
 
     init {
         println("Размер карты: $mapSize")
@@ -13,6 +15,21 @@ class Map (
             MapSize.SMALL -> {mapWidth = 10; mapHeight = 10}
             MapSize.MEDIUM -> {mapWidth = 15; mapHeight = 15}
             MapSize.LARGE -> {mapWidth = 20; mapHeight = 20}
+        }
+
+        resourceFrequency = when((0..2).random())
+        {
+            0 -> SpawnFrequency.LOW
+            1 -> SpawnFrequency.MEDIUM
+            2 -> SpawnFrequency.HIGH
+            else -> SpawnFrequency.LOW
+        }
+        enemyFrequency = when((0..2).random())
+        {
+            0 -> SpawnFrequency.LOW
+            1 -> SpawnFrequency.MEDIUM
+            2 -> SpawnFrequency.HIGH
+            else -> SpawnFrequency.LOW
         }
 
         map = Array(mapHeight) { Array(mapWidth) { MapCellEntity.EMPTY } }
@@ -38,10 +55,37 @@ class Map (
             }
         }
 
-
+        // init map without barriers of edges
+        randomlyAddResources()
+        randomlyAddBarriers()
+        randomlyAddEnemies()
     }
 
 
+    private fun randomlyAddResources()
+    {
+        var frequency : Int = when(resourceFrequency)
+        {
+            SpawnFrequency.LOW -> mapWidth * mapHeight / 10
+            SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 5
+            SpawnFrequency.HIGH -> mapWidth * mapHeight / 2
+        }
+    }
+
+    private fun randomlyAddBarriers()
+    {
+
+    }
+
+    private fun randomlyAddEnemies()
+    {
+        var frequency : Int = when(enemyFrequency)
+        {
+            SpawnFrequency.LOW -> mapWidth * mapHeight / 10
+            SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 5
+            SpawnFrequency.HIGH -> mapWidth * mapHeight / 2
+        }
+    }
 
     fun getMap() = map
 }
