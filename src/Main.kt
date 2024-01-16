@@ -1,5 +1,5 @@
 fun main() {
-    val console = ConsoleWorker();
+    val console = ConsoleWorker()
 
     println("""
     |Выберите размер карты:
@@ -28,5 +28,5 @@ fun main() {
 
     val map = Map(mapSize)
 
-    console.printMap(map.getMapSize())
+    console.printMap(map)
 }
