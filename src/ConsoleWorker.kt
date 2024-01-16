@@ -1,5 +1,5 @@
 class ConsoleWorker {
-    public fun answerCheckerInt(answer: String, numberOfPoints : Int) : Int
+    fun answerCheckerInt(answer: String, numberOfPoints : Int) : Int
     {
         val numeric = answer.matches("-?\\d+(\\.\\d+)?".toRegex())
 
@@ -11,15 +11,24 @@ class ConsoleWorker {
         return number
     }
 
-    public fun printMap(size: MapSize)
+    fun printMap(map: Map)
     {
-        val width = when(size)
+        val mapToPrint = map.getMap()
+
+        for(row in mapToPrint)
         {
-            MapSize.SMALL -> 10
-            MapSize.MEDIUM -> 15
-            MapSize.LARGE -> 20
+            for(cell in row)
+            {
+                when(cell)
+                {
+                    MapCellEntity.EMPTY -> print("   ")
+                    MapCellEntity.RESOURCE -> print(" R ")
+                    MapCellEntity.ENEMY -> print(" M ")
+                    MapCellEntity.BARRIER -> print(" ∎ ")
+                }
+            }
+            println()
         }
-        val height = width
 
     }
 }
