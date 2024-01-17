@@ -32,6 +32,8 @@ class Map (
             else -> SpawnFrequency.LOW
         }
 
+        println("частота ресурсов: $resourceFrequency")
+
         map = Array(mapHeight) { Array(mapWidth) { MapCellEntity.EMPTY } }
 
         createMap()
@@ -64,11 +66,26 @@ class Map (
 
     private fun randomlyAddResources()
     {
-        var frequency : Int = when(resourceFrequency)
+        val resCount : Int = when(resourceFrequency)
         {
-            SpawnFrequency.LOW -> mapWidth * mapHeight / 10
-            SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 5
-            SpawnFrequency.HIGH -> mapWidth * mapHeight / 2
+            SpawnFrequency.LOW -> mapWidth * mapHeight / 25
+            SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 15
+            SpawnFrequency.HIGH -> mapWidth * mapHeight / 10
+        }
+
+        for(i in 1..resCount)
+        {
+            // coordinates of resource
+            var x = (1..<mapWidth - 1).random()
+            var y = (1..<mapHeight - 1).random()
+
+            while(map[y][x] != MapCellEntity.EMPTY)
+            {
+                x = (1..<mapWidth - 1).random()
+                y = (1..<mapHeight - 1).random()
+            }
+
+            map[y][x] = MapCellEntity.RESOURCE
         }
     }
 
