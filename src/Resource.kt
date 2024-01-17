@@ -1,6 +1,6 @@
 class Resource(
     private val frequency : SpawnFrequency,
-    private val coordinates : Pair<Int, Int>
+    private val coordinates : Pair<Int, Int>,
 )
 {
     private val count : Int = 1
@@ -9,4 +9,7 @@ class Resource(
         SpawnFrequency.MEDIUM -> (0..2).random() != 0
         SpawnFrequency.HIGH -> (0..1).random() != 0
     }
+    private val protectionEnemy : Enemy? = if(isProtected) Enemy(EnemyNames.getRandom(), coordinates) else null
+    fun getProtection() : Enemy? = protectionEnemy
+    fun getCount() : Int = count
 }
