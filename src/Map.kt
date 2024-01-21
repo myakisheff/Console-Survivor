@@ -9,7 +9,7 @@ class Map (
     private val enemyList : MutableList<Enemy> = mutableListOf()
     private var playerSpawnCoordinates : Pair<Int, Int> = Pair(0,0)
 
-    var mapValidator = MapValidator()
+    private var mapValidator = MapValidator()
 
     init {
         when(mapSize)
@@ -19,16 +19,12 @@ class Map (
             MapSize.LARGE -> {mapWidth = 20; mapHeight = 20}
         }
 
-        // temporary log
-        println("Размер карты: $mapSize")
-
         map = Array(mapHeight) { Array(mapWidth) { MapCellEntity.EMPTY } }
 
         createMap()
     }
 
     private fun createMap() {
-
         // adding barriers to the edges of the map
         for(i in 0..<mapHeight)
         {
@@ -47,11 +43,8 @@ class Map (
 
         setPlayerSpawnCoordinates(MapPosition.LEFT_TOP_CORNER)
 
-
-        // init barriers
         do
         {
-            println("lol")
             deleteInnerEntity(MapCellEntity.BARRIER)
             deleteInnerEntity(MapCellEntity.RESOURCE)
             deleteInnerEntity(MapCellEntity.ENEMY)
@@ -105,8 +98,6 @@ class Map (
             SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 15
             SpawnFrequency.HIGH -> mapWidth * mapHeight / 10
         }
-
-        println("Количество $entity: $count")
 
         for(i in 1..count)
         {
