@@ -5,11 +5,11 @@ class Map (
     private val mapHeight : Int  // columns
 
     private val map: Array<Array<MapCellEntity>>
-    private val resourceFrequency : SpawnFrequency
-    private val enemyFrequency : SpawnFrequency
     private val resourceList : MutableList<Resource> = mutableListOf()
     private val enemyList : MutableList<Enemy> = mutableListOf()
     private var playerSpawnCoordinates : Pair<Int, Int> = Pair(0,0)
+
+    var mapValidator = MapValidator()
 
     init {
         when(mapSize)
@@ -19,25 +19,8 @@ class Map (
             MapSize.LARGE -> {mapWidth = 20; mapHeight = 20}
         }
 
-        resourceFrequency = when((0..2).random())
-        {
-            0 -> SpawnFrequency.LOW
-            1 -> SpawnFrequency.MEDIUM
-            2 -> SpawnFrequency.HIGH
-            else -> SpawnFrequency.LOW
-        }
-        enemyFrequency = when((0..2).random())
-        {
-            0 -> SpawnFrequency.LOW
-            1 -> SpawnFrequency.MEDIUM
-            2 -> SpawnFrequency.HIGH
-            else -> SpawnFrequency.LOW
-        }
-
         // temporary log
         println("Размер карты: $mapSize")
-        println("Частота ресурсов: $resourceFrequency")
-        println("Частота монстров: $enemyFrequency")
 
         map = Array(mapHeight) { Array(mapWidth) { MapCellEntity.EMPTY } }
 
@@ -62,12 +45,34 @@ class Map (
             }
         }
 
-        setPlayerSpawnCoordinates(MapPosition.CENTER)
+        setPlayerSpawnCoordinates(MapPosition.LEFT_TOP_CORNER)
 
-        // init map without barriers of edges
-        randomlyAddEntity(MapCellEntity.BARRIER)
-        randomlyAddEntity(MapCellEntity.RESOURCE)
-        randomlyAddEntity(MapCellEntity.ENEMY)
+
+        // init barriers
+        do
+        {
+            println("lol")
+            deleteInnerEntity(MapCellEntity.BARRIER)
+            deleteInnerEntity(MapCellEntity.RESOURCE)
+            deleteInnerEntity(MapCellEntity.ENEMY)
+
+            randomlyAddEntity(MapCellEntity.BARRIER)
+            randomlyAddEntity(MapCellEntity.RESOURCE)
+            randomlyAddEntity(MapCellEntity.ENEMY)
+        }while(!mapValidator.allCellsAvailable(map))
+
+    }
+
+    private fun deleteInnerEntity(entity: MapCellEntity)
+    {
+        for(i in 1..<mapHeight - 1)
+        {
+            for(j in 1..<mapWidth - 1)
+            {
+                if (map[i][j] == entity)
+                    map[i][j] = MapCellEntity.EMPTY
+            }
+        }
     }
 
     private fun setPlayerSpawnCoordinates(position: MapPosition)
@@ -86,12 +91,22 @@ class Map (
 
     private fun randomlyAddEntity(entity: MapCellEntity)
     {
-        val count : Int = when(resourceFrequency)
+        val frequency = when((0..2).random())
+        {
+            0 -> SpawnFrequency.LOW
+            1 -> SpawnFrequency.MEDIUM
+            2 -> SpawnFrequency.HIGH
+            else -> SpawnFrequency.LOW
+        }
+
+        val count : Int = when(frequency)
         {
             SpawnFrequency.LOW -> mapWidth * mapHeight / 25
             SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 15
             SpawnFrequency.HIGH -> mapWidth * mapHeight / 10
         }
+
+        println("Количество $entity: $count")
 
         for(i in 1..count)
         {
