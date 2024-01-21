@@ -11,6 +11,18 @@ class ConsoleWorker {
         return number
     }
 
+    fun printAvailableWays(ways: Array<Array<Boolean?>>)
+    {
+        for(row in ways)
+        {
+            for(cell in row)
+            {
+                print(" $cell ")
+            }
+            println()
+        }
+    }
+
     fun printMap(map: Map)
     {
         val mapToPrint = map.getMap()
@@ -46,6 +58,5 @@ class ConsoleWorker {
             }
             println()
         }
-
     }
 }
