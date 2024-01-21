@@ -1,0 +1,7 @@
+enum class MapPosition {
+    LEFT_TOP_CORNER,
+    RIGHT_TOP_CORNER,
+    CENTER,
+    LEFT_BOTTOM_CORNER,
+    RIGHT_BOTTOM_CORNER,
+}
