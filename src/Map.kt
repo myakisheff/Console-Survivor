@@ -1,17 +1,17 @@
 class Map (
     mapSize : MapSize,
 ) {
-    private val mapWidth : Int
-    private val mapHeight : Int
+    private val mapWidth : Int   // rows
+    private val mapHeight : Int  // columns
+
     private val map: Array<Array<MapCellEntity>>
     private val resourceFrequency : SpawnFrequency
     private val enemyFrequency : SpawnFrequency
     private val resourceList : MutableList<Resource> = mutableListOf()
     private val enemyList : MutableList<Enemy> = mutableListOf()
+    private var playerSpawnCoordinates : Pair<Int, Int> = Pair(0,0)
 
     init {
-        println("Размер карты: $mapSize")
-
         when(mapSize)
         {
             MapSize.SMALL -> {mapWidth = 10; mapHeight = 10}
@@ -34,7 +34,10 @@ class Map (
             else -> SpawnFrequency.LOW
         }
 
-        println("частота ресурсов: $resourceFrequency")
+        // temporary log
+        println("Размер карты: $mapSize")
+        println("Частота ресурсов: $resourceFrequency")
+        println("Частота монстров: $enemyFrequency")
 
         map = Array(mapHeight) { Array(mapWidth) { MapCellEntity.EMPTY } }
 
@@ -59,25 +62,40 @@ class Map (
             }
         }
 
+        setPlayerSpawnCoordinates(MapPosition.CENTER)
+
         // init map without barriers of edges
-        randomlyAddBarriers()
-        randomlyAddResources()
-        randomlyAddEnemies()
+        randomlyAddEntity(MapCellEntity.BARRIER)
+        randomlyAddEntity(MapCellEntity.RESOURCE)
+        randomlyAddEntity(MapCellEntity.ENEMY)
     }
 
-
-    private fun randomlyAddResources()
+    private fun setPlayerSpawnCoordinates(position: MapPosition)
     {
-        val resCount : Int = when(resourceFrequency)
+        playerSpawnCoordinates = when(position) {
+            MapPosition.LEFT_TOP_CORNER -> Pair(1, 1)
+            MapPosition.RIGHT_TOP_CORNER -> Pair(1, mapWidth - 1)
+            MapPosition.CENTER -> Pair(mapHeight / 2, mapWidth / 2)
+            MapPosition.LEFT_BOTTOM_CORNER -> Pair(mapHeight - 1, 1)
+            MapPosition.RIGHT_BOTTOM_CORNER -> Pair(mapHeight - 1, mapWidth - 1)
+        }
+
+        val (width, height) = playerSpawnCoordinates
+        map[height][width] = MapCellEntity.PLAYER
+    }
+
+    private fun randomlyAddEntity(entity: MapCellEntity)
+    {
+        val count : Int = when(resourceFrequency)
         {
             SpawnFrequency.LOW -> mapWidth * mapHeight / 25
             SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 15
             SpawnFrequency.HIGH -> mapWidth * mapHeight / 10
         }
 
-        for(i in 1..resCount)
+        for(i in 1..count)
         {
-            // coordinates of resource
+            // coordinates
             var x = (1..<mapWidth - 1).random()
             var y = (1..<mapHeight - 1).random()
 
@@ -86,44 +104,13 @@ class Map (
                 x = (1..<mapWidth - 1).random()
                 y = (1..<mapHeight - 1).random()
 
-                val protectedFrequency = SpawnFrequency.LOW
+                if(entity == MapCellEntity.RESOURCE)
+                    resourceList.add(Resource(SpawnFrequency.LOW, Pair(x,y)))
+                else if (entity == MapCellEntity.ENEMY)
+                    enemyList.add(Enemy(EnemyNames.getRandom(), Pair(x,y)))
 
-                resourceList.add(Resource(protectedFrequency, Pair(x,y)))
             }
-
-            map[y][x] = MapCellEntity.RESOURCE
-        }
-    }
-
-    private fun randomlyAddBarriers()
-    {
-
-    }
-
-    private fun randomlyAddEnemies()
-    {
-        val enemyCount : Int = when(enemyFrequency)
-        {
-            SpawnFrequency.LOW -> mapWidth * mapHeight / 25
-            SpawnFrequency.MEDIUM -> mapWidth * mapHeight / 15
-            SpawnFrequency.HIGH -> mapWidth * mapHeight / 10
-        }
-
-        for(i in 1..enemyCount)
-        {
-            // coordinates of resource
-            var x = (1..<mapWidth - 1).random()
-            var y = (1..<mapHeight - 1).random()
-
-            while(map[y][x] != MapCellEntity.EMPTY)
-            {
-                x = (1..<mapWidth - 1).random()
-                y = (1..<mapHeight - 1).random()
-
-                enemyList.add(Enemy(EnemyNames.getRandom(), Pair(x,y)))
-            }
-
-            map[y][x] = MapCellEntity.ENEMY
+            map[y][x] = entity
         }
     }
 
