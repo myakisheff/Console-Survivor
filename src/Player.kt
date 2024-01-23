@@ -1,5 +1,7 @@
+import entities.Enemy
+
 class Player(
-    private var coordinates : Pair<Int, Int> // height, width
+    private var coordinates : Pair<Int, Int>
 ) {
     private var level : Int = 1
     private var resources : Int = 0
@@ -9,15 +11,19 @@ class Player(
 
     private var isDied : Boolean = false
 
+    private var prevCoordinates = coordinates
+
     // TODO: Inventory, Spells, Equipment, Abilities
 
     fun move(direction: Direction)
     {
+        prevCoordinates = coordinates
         coordinates = when(direction) {
             Direction.LEFT -> coordinates.copy(second = coordinates.second - 1)
-            Direction.TOP -> coordinates.copy(second = coordinates.first - 1)
+            Direction.TOP -> coordinates.copy(first = coordinates.first - 1)
             Direction.RIGHT -> coordinates.copy(second = coordinates.second + 1)
-            Direction.BOTTOM -> coordinates.copy(second = coordinates.first + 1)
+            Direction.BOTTOM -> coordinates.copy(first = coordinates.first + 1)
+            Direction.NONE -> coordinates
         }
     }
 
@@ -42,9 +48,19 @@ class Player(
     }
 
     fun setPosition(height: Int, width: Int) {
+        prevCoordinates = coordinates
         coordinates = Pair(height, width)
     }
 
     fun getPosition(): Pair<Int, Int> = coordinates
+    fun fakeMove(dir: Direction): Pair<Int, Int> {
+        return when(dir) {
+            Direction.LEFT -> coordinates.copy(second = coordinates.second - 1)
+            Direction.TOP -> coordinates.copy(first = coordinates.first - 1)
+            Direction.RIGHT -> coordinates.copy(second = coordinates.second + 1)
+            Direction.BOTTOM -> coordinates.copy(first = coordinates.first + 1)
+            Direction.NONE -> coordinates
+        }
+    }
 
 }
