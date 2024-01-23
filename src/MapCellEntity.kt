@@ -4,4 +4,5 @@ enum class MapCellEntity {
     ENEMY,
     BARRIER,
     PLAYER,
+    TRADER,
 }
