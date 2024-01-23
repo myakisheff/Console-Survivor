@@ -29,4 +29,10 @@ fun main() {
     val map = Map(mapSize)
 
     console.printMap(map)
+
+    println()
+
+    println("Сделайте ход:")
+    console.printAvailableDirections(map.getPlayerPosition(), map)
+    println("Введите номер действия: ")
 }

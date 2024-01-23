@@ -59,4 +59,42 @@ class ConsoleWorker {
             println()
         }
     }
+
+    fun printAvailableDirections(playerPos : Pair<Int, Int>, map: Map) {
+
+        val directions : MutableList<String> = mutableListOf()
+
+        val (height, width) = playerPos
+
+        for(i in 0..3)
+        {
+            var w  = 0
+            var h  = 0
+
+            var dir = ""
+
+            when(i)
+            {
+                0 -> { w = 1; dir = "на право"}
+                1 -> { w = -1; dir = "на лево"}
+                2 -> { h = 1; dir = "вниз"}
+                3 -> { h = -1; dir = "вверх"}
+            }
+
+            when(map.getCell(height + h, width + w))
+            {
+                MapCellEntity.EMPTY -> directions.add("Перейти ($dir)")
+                MapCellEntity.RESOURCE -> directions.add("Подобрать ресурсы ($dir)")
+                MapCellEntity.ENEMY -> directions.add("Атаковать ($dir)")
+                MapCellEntity.BARRIER -> continue
+                MapCellEntity.PLAYER -> continue
+            }
+        }
+
+        var n = 1
+        directions.forEach {
+            println("$n. $it")
+            n++
+        }
+    }
 }
