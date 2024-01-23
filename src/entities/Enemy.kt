@@ -1,7 +1,10 @@
+package entities
+
 class Enemy(
+    private val ID : Int,
     private val name : String,
     private val coordinates : Pair<Int, Int>
-)
+) : Entity(coordinates)
 {
     private var healPoints : Int = 100
     private val damage : Int = 0
