@@ -1,3 +1,5 @@
+import entities.*
+
 class Map (
     mapSize : MapSize,
 ) {
@@ -8,8 +10,7 @@ class Map (
     private val resourceList : MutableList<Resource> = mutableListOf()
     private val enemyList : MutableList<Enemy> = mutableListOf()
 
-    private var playerSpawnCoordinates : Pair<Int, Int> = Pair(0,0)
-    private var player : Player = Player(Pair(0,0))
+    private var playerCoordinates = Pair(0,0)
 
     private var mapValidator = MapValidator()
 
@@ -43,8 +44,6 @@ class Map (
             }
         }
 
-        setPlayerSpawnCoordinates(MapPosition.LEFT_TOP_CORNER)
-
         do
         {
             deleteInnerEntity(MapCellEntity.BARRIER)
@@ -68,21 +67,19 @@ class Map (
                     map[i][j] = MapCellEntity.EMPTY
             }
         }
+        if(entity == MapCellEntity.ENEMY)
+            enemyList.clear()
+        else if(entity == MapCellEntity.RESOURCE)
+            resourceList.clear()
     }
 
-    private fun setPlayerSpawnCoordinates(position: MapPosition)
+    fun setPlayerCoordinates(playerNewCoordinates: Pair<Int, Int>)
     {
-        playerSpawnCoordinates = when(position) {
-            MapPosition.LEFT_TOP_CORNER -> Pair(1, 1)
-            MapPosition.RIGHT_TOP_CORNER -> Pair(1, mapWidth - 1)
-            MapPosition.CENTER -> Pair(mapHeight / 2, mapWidth / 2)
-            MapPosition.LEFT_BOTTOM_CORNER -> Pair(mapHeight - 1, 1)
-            MapPosition.RIGHT_BOTTOM_CORNER -> Pair(mapHeight - 1, mapWidth - 1)
-        }
-
-        val (width, height) = playerSpawnCoordinates
+        if(map[playerCoordinates.first][playerCoordinates.second] == MapCellEntity.PLAYER)
+            map[playerCoordinates.first][playerCoordinates.second] = MapCellEntity.EMPTY
+        playerCoordinates = playerNewCoordinates
+        val (height, width) = playerNewCoordinates
         map[height][width] = MapCellEntity.PLAYER
-        player.setPosition(height, width)
     }
 
     private fun randomlyAddEntity(entity: MapCellEntity)
@@ -112,18 +109,30 @@ class Map (
             {
                 x = (1..<mapWidth - 1).random()
                 y = (1..<mapHeight - 1).random()
-
-                if(entity == MapCellEntity.RESOURCE)
-                    resourceList.add(Resource(SpawnFrequency.LOW, Pair(x,y)))
-                else if (entity == MapCellEntity.ENEMY)
-                    enemyList.add(Enemy(EnemyNames.getRandom(), Pair(x,y)))
-
             }
             map[y][x] = entity
+
+            if(entity == MapCellEntity.RESOURCE)
+                resourceList.add(Resource(SpawnFrequency.LOW, Pair(y,x)))
+            else if (entity == MapCellEntity.ENEMY)
+                enemyList.add(Enemy(i, EnemyNames.getRandom(), Pair(y,x)))
         }
     }
 
+    fun getCell(pos : Pair<Int, Int>) = map[pos.first][pos.second]
     fun getMap() = map
-    fun getCell(height : Int, width : Int) = map[height][width]
-    fun getPlayerPosition(): Pair<Int, Int> = player.getPosition()
+    fun getMapSize() = Pair(mapWidth, mapHeight)
+
+    fun getCellInfo(cell: Pair<Int, Int>) : Entity {
+
+        return when(getCell(cell))
+        {
+            MapCellEntity.EMPTY -> Field(cell)
+            MapCellEntity.RESOURCE -> resourceList.find { it.getCoordinates() == cell }!!
+            MapCellEntity.ENEMY -> enemyList.find { it.getCoordinates() == cell }!!
+            MapCellEntity.BARRIER ->  Barrier(cell)
+            MapCellEntity.PLAYER ->  Field(cell)
+            MapCellEntity.TRADER ->  Trader(cell)
+        }
+    }
 }
