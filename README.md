@@ -22,13 +22,13 @@ TODO:
    4. _Moving_
 
 4. Player
-   1. _Moving_
+   1. _Moving_ (✓)
    2. _Upgrades_
    3. _Storage of resources_
-   4. _Dealing damage_
+   4. _Dealing damage_ (✓)
    5. _List of abilities and spells_
-   6. _Dying_
-   7. _Level up_
+   6. _Dying_ (✓)
+   7. _Level up_ (✓)
    8. _Inventory_
    9. _Equipment_
    10. _Transfer of items_
@@ -72,4 +72,4 @@ TODO:
    2. _On the map_
       1. _Teleport_
 
-### ___This list will be updated___
+### ___New list items will be added in the future___
