@@ -13,7 +13,7 @@ fun main() {
     var answerInt : Int = console.answerCheckerInt(chosenMapSize, 3)
     while(answerInt == -1)
     {
-        println("Введите корректный ответ:")
+        println("Введите корректный номер:")
         chosenMapSize = readln()
         answerInt = console.answerCheckerInt(chosenMapSize, 3)
     }
@@ -26,13 +26,56 @@ fun main() {
         else -> MapSize.MEDIUM
     }
 
-    val map = Map(mapSize)
+    val game = GameController(mapSize)
 
-    console.printMap(map)
+    while(game.gameState != GameState.END)
+    {
+        when(game.gameState)
+        {
+            GameState.MAP -> println()
+            GameState.BATTLE -> TODO()
+            GameState.TRADER -> TODO()
+            GameState.PLAYER -> TODO()
+            GameState.END -> continue
+        }
 
-    println()
 
-    println("Сделайте ход:")
-    console.printAvailableDirections(map.getPlayerPosition(), map)
-    println("Введите номер действия: ")
+        console.printMap(game.getMap())
+
+        println()
+
+        println("Сделайте ход:")
+        val directions = console.printAvailableDirections(game.getPlayerPosition(), game.getMap())
+        val actCount = directions.size
+
+        println("Введите номер действия: ")
+        println("Для перехода к настройкам персонажа введите settings")
+
+        var playerAction = readln()
+        if(playerAction == "settings")
+        {
+            game.gameState = GameState.PLAYER
+            continue
+        }
+
+        answerInt = console.answerCheckerInt(playerAction, actCount)
+        while(answerInt == -1)
+        {
+            println("Введите корректный номер:")
+            playerAction = readln()
+            if(playerAction == "settings")
+            {
+                game.gameState = GameState.PLAYER
+                continue
+            }
+            answerInt = console.answerCheckerInt(playerAction, actCount)
+        }
+
+        // check cell info
+        val isGoing = console.printCellInfo(game.getCellInfo(
+            game.getCoordinatesByDirection(directions[answerInt - 1].second)))
+
+        if(isGoing && game.gameState != GameState.TRADER)
+            game.playerMove(directions[answerInt - 1].second)
+    }
 }
