@@ -7,7 +7,9 @@ class Map (
     private val map: Array<Array<MapCellEntity>>
     private val resourceList : MutableList<Resource> = mutableListOf()
     private val enemyList : MutableList<Enemy> = mutableListOf()
+
     private var playerSpawnCoordinates : Pair<Int, Int> = Pair(0,0)
+    private var player : Player = Player(Pair(0,0))
 
     private var mapValidator = MapValidator()
 
@@ -80,6 +82,7 @@ class Map (
 
         val (width, height) = playerSpawnCoordinates
         map[height][width] = MapCellEntity.PLAYER
+        player.setPosition(height, width)
     }
 
     private fun randomlyAddEntity(entity: MapCellEntity)
@@ -121,4 +124,6 @@ class Map (
     }
 
     fun getMap() = map
+    fun getCell(height : Int, width : Int) = map[height][width]
+    fun getPlayerPosition(): Pair<Int, Int> = player.getPosition()
 }
