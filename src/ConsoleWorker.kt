@@ -151,4 +151,14 @@ class ConsoleWorker {
         return answerInt == 1
     }
 
+    fun printPlayerInfo(playerInfo: PlayerInfo) {
+        // print player info
+        println("Уровень: ${playerInfo.level}")
+        println("Опыт: ${playerInfo.expPoints}/${playerInfo.expPointsToUp}")
+        println("Очки способностей: ${playerInfo.skillPoints}")
+        println("Здоровье: ${playerInfo.healPoints}")
+        println("Урон: ${playerInfo.damage}")
+        println("Защита: ${playerInfo.defense}")
+    }
+
 }

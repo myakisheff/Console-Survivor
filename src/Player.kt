@@ -3,11 +3,16 @@ import entities.Enemy
 class Player(
     private var coordinates : Pair<Int, Int>
 ) {
+    private var expPoints : Int = 0
+    private var expPointsToUp : Int = 100
     private var level : Int = 1
+    private var skillPoints : Int = 0
+
     private var resources : Int = 0
 
     private var healPoints : Int = 1
     private var damage : Int = 1
+    private var defense : Int = 1
 
     private var isDied : Boolean = false
 
@@ -30,6 +35,10 @@ class Player(
     fun levelUp()
     {
         level++
+        skillPoints += if(level < 5) 5
+        else 10
+        expPoints -= expPointsToUp
+        expPointsToUp += 100
     }
 
     fun attack(target: Any)
@@ -63,4 +72,16 @@ class Player(
         }
     }
 
+    fun getInfo(): PlayerInfo {
+        return PlayerInfo(
+            level = level.toString(),
+            expPoints = expPoints.toString(),
+            expPointsToUp = expPointsToUp.toString(),
+            skillPoints = skillPoints.toString(),
+            healPoints = healPoints.toString(),
+            damage = damage.toString(),
+            defense = defense.toString(),
+            coordinates = "${coordinates.first}, ${coordinates.second}"
+        )
+    }
 }

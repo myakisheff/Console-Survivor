@@ -35,7 +35,32 @@ fun main() {
             GameState.MAP -> println()
             GameState.BATTLE -> TODO()
             GameState.TRADER -> TODO()
-            GameState.PLAYER -> TODO()
+            GameState.PLAYER -> {
+                console.printPlayerInfo(game.getPlayerInfo())
+                println("""
+                |Выберите действие:
+                |1. Посмотреть способности
+                |2. Посмотреть инвентарь
+                |3. Выйти
+                |Напишите номер пункта:
+                """.trimMargin())
+
+                var chosenAction = readln()
+                answerInt = console.answerCheckerInt(chosenAction, 3)
+                while(answerInt == -1)
+                {
+                    println("Введите корректный номер:")
+                    chosenAction = readln()
+                    answerInt = console.answerCheckerInt(chosenAction, 3)
+                }
+
+                when(answerInt)
+                {
+                    1 -> TODO()
+                    2 -> TODO()
+                    3 -> continue
+                }
+            }
             GameState.END -> continue
         }
 
@@ -71,10 +96,11 @@ fun main() {
             answerInt = console.answerCheckerInt(playerAction, actCount)
         }
 
-        // check cell info
+        // check cell info. returns true if user really wants to go to the next cell
         val isGoing = console.printCellInfo(game.getCellInfo(
             game.getCoordinatesByDirection(directions[answerInt - 1].second)))
 
+        // We don't need to change trader on a player
         if(isGoing && game.gameState != GameState.TRADER)
             game.playerMove(directions[answerInt - 1].second)
     }
