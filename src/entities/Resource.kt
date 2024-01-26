@@ -3,8 +3,8 @@ package entities
 import SpawnFrequency
 
 class Resource(
-    private val frequency : SpawnFrequency,
-    private val coordinates : Pair<Int, Int>,
+    frequency : SpawnFrequency,
+    coordinates : Pair<Int, Int>,
 ) : Entity(coordinates)
 {
     private val count : Int = 1
