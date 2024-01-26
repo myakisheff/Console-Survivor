@@ -24,7 +24,7 @@ TODO:
 4. Player
    1. _Moving_ (✓)
    2. _Upgrades_
-   3. _Storage of resources_
+   3. _Storage of resources_ (✓)
    4. _Dealing damage_ (✓)
    5. _List of abilities and spells_
    6. _Dying_ (✓)
