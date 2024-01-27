@@ -1,13 +1,15 @@
+import entities.Field
+
 class MapValidator {
     private var availableWays : Array<Array<Boolean?>> = Array(1) { Array(1) { null } }
-    private var map = Array(1) { Array(1) { MapCellEntity.EMPTY } }
+    private var map = Array(1) { Array(1) { MapCell(Field()) } }
 
     /**
      * Checks whether each cell of the map can be reached by EMPTY cells
      *
      * @property map is a two-dimensional array defining the game map.
      */
-    fun allCellsAvailable(map: Array<Array<MapCellEntity>>) : Boolean
+    fun allCellsAvailable(map: Array<Array<MapCell>>) : Boolean
     {
         this.map = map
         availableWays = Array(map.size) { Array(map[0].size) { false } }
@@ -37,7 +39,7 @@ class MapValidator {
             return
 
         availableWays[coordinates.second][coordinates.first] =
-            if(map[coordinates.second][coordinates.first] == MapCellEntity.EMPTY) // != MapCellEntity.BARRIER
+            if(map[coordinates.second][coordinates.first].getMainEntity() is Field)
         true else null
 
         for(i in 0..3)
@@ -52,7 +54,7 @@ class MapValidator {
                 3 -> w = 1
             }
 
-            if(map[coordinates.second + h][coordinates.first + w] == MapCellEntity.EMPTY) // != MapCellEntity.BARRIER
+            if(map[coordinates.second + h][coordinates.first + w].getMainEntity() is Field)
                 checkCells(Pair(coordinates.first + w, coordinates.second + h))
             else availableWays[coordinates.second + h][coordinates.first + w] = null
         }

@@ -1,13 +1,21 @@
+import entities.*
+
 class GameController(
     mapSize : MapSize,
 ) {
     private val map = Map(mapSize)
-    private var player : Player = Player(Pair(0,0))
+    private var player : Player = Player()
 
     var gameState = GameState.MAP
 
     init{
         setPlayerCoordinates(MapPosition.CENTER)
+    }
+
+    fun checkPlayerAlive()
+    {
+        if(player.died())
+            gameState = GameState.END
     }
 
     private fun setPlayerCoordinates(position: MapPosition)
@@ -24,22 +32,20 @@ class GameController(
 
         val (height, width) = playerCoordinates
         player.setPosition(height, width)
-        map.setPlayerCoordinates(player.getPosition())
+        map.addPlayer(player)
     }
 
-    fun getMap(): Array<Array<MapCellEntity>> = map.getMap()
+    fun getMap(): Array<Array<MapCell>> = map.getMap()
     fun getPlayerPosition(): Pair<Int, Int> = player.getPosition()
     fun getCoordinatesByDirection(dir : Direction) : Pair<Int, Int> = player.fakeMove(dir)
     fun playerMove(pMove: Direction) {
         player.move(pMove)
-        map.setPlayerCoordinates(player.getPosition())
-        gameState = when(map.getCell(player.getPosition())) {
-            MapCellEntity.EMPTY -> GameState.MAP
-            MapCellEntity.RESOURCE -> GameState.MAP
-            MapCellEntity.ENEMY -> GameState.BATTLE
-            MapCellEntity.BARRIER -> GameState.MAP
-            MapCellEntity.PLAYER -> GameState.MAP
-            MapCellEntity.TRADER -> GameState.TRADER
+        map.movePlayer(player)
+        gameState = when(map.getCell(player.getPosition()).getMainEntity()) {
+            is Resource -> GameState.MAP
+            is Enemy -> GameState.BATTLE
+            is Trader -> GameState.TRADER
+            else -> GameState.MAP
         }
     }
 

@@ -25,7 +25,7 @@ class ConsoleWorker {
         }
     }
 
-    fun printMap(map: Array<Array<MapCellEntity>>)
+    fun printMap(map: Array<Array<MapCell>>)
     {
         var rowNumber = 0
         var columnNumber = 0
@@ -48,21 +48,21 @@ class ConsoleWorker {
             // show map row
             for(cell in row)
             {
-                when(cell)
+                when(cell.getMainEntity())
                 {
-                    MapCellEntity.EMPTY -> print("    ")
-                    MapCellEntity.RESOURCE -> print("  R ")
-                    MapCellEntity.ENEMY -> print("  M ")
-                    MapCellEntity.BARRIER -> print("  ∎ ")
-                    MapCellEntity.PLAYER -> print("  P ")
-                    MapCellEntity.TRADER -> print("  T ")
+                    is Field -> print("    ")
+                    is Resource -> print("  R ")
+                    is Enemy -> print("  M ")
+                    is Barrier -> print("  ∎ ")
+                    is Player -> print("  P ")
+                    is Trader -> print("  T ")
                 }
             }
             println()
         }
     }
 
-    fun printAvailableDirections(playerPos : Pair<Int, Int>, map: Array<Array<MapCellEntity>>) : MutableList<Pair<String, Direction>> {
+    fun printAvailableDirections(playerPos : Pair<Int, Int>, map: Array<Array<MapCell>>) : MutableList<Pair<String, Direction>> {
         val directions : MutableList<Pair<String, Direction>> = mutableListOf()
 
         val (height, width) = playerPos
@@ -83,14 +83,12 @@ class ConsoleWorker {
                 3 -> { h = -1; dirTxt = "вверх"; dir = Direction.TOP}
             }
 
-            when(map[height + h][width + w])
+            when(map[height + h][width + w].getMainEntity())
             {
-                MapCellEntity.EMPTY -> directions.add(Pair("Перейти ($dirTxt)", dir))
-                MapCellEntity.RESOURCE -> directions.add(Pair("Подобрать ресурсы ($dirTxt)", dir))
-                MapCellEntity.ENEMY -> directions.add(Pair("Атаковать ($dirTxt)", dir))
-                MapCellEntity.BARRIER -> continue
-                MapCellEntity.PLAYER -> continue
-                MapCellEntity.TRADER -> directions.add(Pair("Торговать ($dirTxt)", dir))
+                is Field -> directions.add(Pair("Перейти ($dirTxt)", dir))
+                is Resource -> directions.add(Pair("Подобрать ресурсы ($dirTxt)", dir))
+                is Enemy -> directions.add(Pair("Атаковать ($dirTxt)", dir))
+                is Trader -> directions.add(Pair("Торговать ($dirTxt)", dir))
             }
         }
 
@@ -156,9 +154,11 @@ class ConsoleWorker {
         println("Уровень: ${playerInfo.level}")
         println("Опыт: ${playerInfo.expPoints}/${playerInfo.expPointsToUp}")
         println("Очки способностей: ${playerInfo.skillPoints}")
-        println("Здоровье: ${playerInfo.healPoints}")
+        println("Здоровье: ${playerInfo.healPoints}/${playerInfo.healPointsMax}")
+        println("Регенерация: ${playerInfo.healPoints}/ход")
         println("Урон: ${playerInfo.damage}")
         println("Защита: ${playerInfo.defense}")
+        println("Мана: ${playerInfo.mana}/${playerInfo.manaMax}")
     }
 
 }

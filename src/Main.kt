@@ -56,14 +56,14 @@ fun main() {
 
                 when(answerInt)
                 {
-                    1 -> TODO()
-                    2 -> TODO()
-                    3 -> continue
+                    1 -> TODO() // check abilities
+                    2 -> TODO() // check inventory
+                    3 -> println("leave")
                 }
             }
             GameState.END -> continue
         }
-
+        game.gameState = GameState.MAP
 
         console.printMap(game.getMap())
 
@@ -103,5 +103,9 @@ fun main() {
         // We don't need to change trader on a player
         if(isGoing && game.gameState != GameState.TRADER)
             game.playerMove(directions[answerInt - 1].second)
+
+        game.checkPlayerAlive()
     }
+
+    println("Игра завершена")
 }
