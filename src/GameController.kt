@@ -51,4 +51,5 @@ class GameController(
 
     fun getCellInfo(cell: Pair<Int, Int>) = map.getCellInfo(cell)
     fun getPlayerInfo() = player.getInfo()
+    fun getAllEntities() = map.getAllEntities(getPlayerPosition())
 }

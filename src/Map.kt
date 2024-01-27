@@ -138,4 +138,5 @@ class Map (
     fun getMapSize() = Pair(mapWidth, mapHeight)
 
     fun getCellInfo(cell: Pair<Int, Int>) = getCell(cell).getMainEntity()
+    fun getAllEntities(cell: Pair<Int, Int>) = map[cell.first][cell.second].getAllEntities()
 }

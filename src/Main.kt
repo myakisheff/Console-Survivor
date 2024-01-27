@@ -28,8 +28,10 @@ fun main() {
 
     val game = GameController(mapSize)
 
+    // game start
     while(game.gameState != GameState.END)
     {
+        // checking game state (in battle, trader or not)
         when(game.gameState)
         {
             GameState.MAP -> println()
@@ -67,6 +69,10 @@ fun main() {
 
         console.printMap(game.getMap())
 
+        println()
+
+        println("log: Все сущности на клетке")
+        console.printEntities(game.getAllEntities())
         println()
 
         println("Сделайте ход:")

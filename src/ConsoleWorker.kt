@@ -161,4 +161,10 @@ class ConsoleWorker {
         println("Мана: ${playerInfo.mana}/${playerInfo.manaMax}")
     }
 
+    fun printEntities(allEntities: MutableList<Entity>) {
+        allEntities.forEach {
+            println("log: entity: $it")
+        }
+    }
+
 }

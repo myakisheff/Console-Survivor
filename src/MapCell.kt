@@ -28,4 +28,5 @@ class MapCell(
     }
 
     fun getMainEntity() = mainEntity
+    fun getAllEntities() = entities
 }
