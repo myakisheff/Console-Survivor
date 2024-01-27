@@ -1,8 +1,10 @@
-import entities.Enemy
+package entities
 
-class Player(
-    private var coordinates : Pair<Int, Int>
-) {
+import Direction
+import PlayerInfo
+
+class Player : Entity() {
+    private var coordinates : Pair<Int, Int> = Pair(0,0)
     private var expPoints : Int = 0
     private var expPointsToUp : Int = 100
     private var level : Int = 1
@@ -10,9 +12,13 @@ class Player(
 
     private var resources : Int = 0
 
-    private var healPoints : Int = 1
-    private var damage : Int = 1
-    private var defense : Int = 1
+    private var healPoints : Int = 100
+    private var healPointsMax : Int = 100
+    private var regeneration : Int = 10
+    private var damage : Int = 15
+    private var defense : Int = 5
+    private var mana : Int = 0
+    private var manaMax : Int = 0
 
     private var isDied : Boolean = false
 
@@ -32,7 +38,7 @@ class Player(
         }
     }
 
-    fun levelUp()
+    private fun levelUp()
     {
         level++
         skillPoints += if(level < 5) 5
@@ -46,12 +52,22 @@ class Player(
         if(target is Enemy)
         {
             target.takeDamage(damage)
+            if(target.isDied())
+            {
+                addExp(target.getExp())
+            }
         }
+    }
+
+    private fun addExp(exp: Int) {
+        expPoints += exp
+        if (expPoints > expPointsToUp)
+            levelUp()
     }
 
     fun takeDamage(dmg : Int)
     {
-        healPoints -= dmg
+        healPoints -= if(dmg - defense > 0) dmg - defense else 0
         if(healPoints <= 0)
             isDied = true
     }
@@ -79,9 +95,20 @@ class Player(
             expPointsToUp = expPointsToUp.toString(),
             skillPoints = skillPoints.toString(),
             healPoints = healPoints.toString(),
+            healPointsMax = healPointsMax.toString(),
             damage = damage.toString(),
             defense = defense.toString(),
+            regeneration = regeneration.toString(),
+            mana = mana.toString(),
+            manaMax = manaMax.toString(),
             coordinates = "${coordinates.first}, ${coordinates.second}"
         )
     }
+
+    fun statIncrease()
+    {
+
+    }
+
+    fun died(): Boolean = isDied
 }
