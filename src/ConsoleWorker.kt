@@ -1,4 +1,6 @@
 import entities.*
+import items.EmptyEquipment
+import items.Item
 
 class ConsoleWorker {
     fun answerCheckerInt(answer: String, numberOfPoints : Int) : Int
@@ -11,18 +13,6 @@ class ConsoleWorker {
         if(number > numberOfPoints)
             return -1
         return number
-    }
-
-    fun printAvailableWays(ways: Array<Array<Boolean?>>)
-    {
-        for(row in ways)
-        {
-            for(cell in row)
-            {
-                print(" $cell ")
-            }
-            println()
-        }
     }
 
     fun printMap(map: Array<Array<MapCell>>)
@@ -150,6 +140,7 @@ class ConsoleWorker {
     }
 
     fun printPlayerInfo(playerInfo: PlayerInfo) {
+        println("\n-------------------------------------")
         // print player info
         println("Уровень: ${playerInfo.level}")
         println("Опыт: ${playerInfo.expPoints}/${playerInfo.expPointsToUp}")
@@ -159,11 +150,76 @@ class ConsoleWorker {
         println("Урон: ${playerInfo.damage}")
         println("Защита: ${playerInfo.defense}")
         println("Мана: ${playerInfo.mana}/${playerInfo.manaMax}")
+        println("-------------------------------------\n")
     }
 
     fun printEntities(allEntities: MutableList<Entity>) {
         allEntities.forEach {
             println("log: entity: $it")
+        }
+    }
+
+    fun printInventory(playerInventory: MutableList<Item>) : Pair<Int,Item> {
+        println()
+        println("Инвентарь: ")
+        var num = 1
+        playerInventory.forEach {
+            println("$num. $it")
+            num++
+        }
+        println()
+
+        println("Введите номер предмета для действия или 0 для выхода")
+
+        var itemOrExit = readln()
+        var answerInt : Int = answerCheckerInt(itemOrExit, playerInventory.size)
+        while(answerInt == -1)
+        {
+            println("Введите корректный номер:")
+            itemOrExit = readln()
+            answerInt = answerCheckerInt(itemOrExit, playerInventory.size)
+        }
+
+        when(answerInt)
+        {
+            0 -> println("Возврат...")
+            else -> return printItem(playerInventory[answerInt])
+        }
+        return Pair(0, EmptyEquipment("empty"))
+    }
+
+    private fun printItem(item: Item) : Pair<Int,Item> {
+        println()
+        println("Предмет: ${item.name}")
+        println()
+
+        println("""
+        |Введите номер действия
+        |1. Выбросить
+        |2. Использовать
+        |3. Выход
+        |Напишите номер пункта:
+        """.trimMargin())
+
+        var itemOrExit = readln()
+        var answerInt : Int = answerCheckerInt(itemOrExit, 3)
+        while(answerInt == -1)
+        {
+            println("Введите корректный номер:")
+            itemOrExit = readln()
+            answerInt = answerCheckerInt(itemOrExit, 3)
+        }
+
+        when(answerInt)
+        {
+            1 -> {
+                println("Выбрасываем ${item.name}...")
+                return Pair(1, item)
+            }
+            2 -> {
+                return Pair(2, item)
+            }
+            else -> return Pair(0, EmptyEquipment("empty"))
         }
     }
 
