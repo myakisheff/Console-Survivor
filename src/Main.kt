@@ -1,3 +1,6 @@
+import items.EmptyEquipment
+import items.Item
+
 fun main() {
     val console = ConsoleWorker()
 
@@ -35,7 +38,9 @@ fun main() {
         when(game.gameState)
         {
             GameState.MAP -> println()
-            GameState.BATTLE -> TODO()
+            GameState.BATTLE -> {
+                console.printPlayerInfo(game.getPlayerInfo())
+            }
             GameState.TRADER -> TODO()
             GameState.PLAYER -> {
                 console.printPlayerInfo(game.getPlayerInfo())
@@ -56,11 +61,18 @@ fun main() {
                     answerInt = console.answerCheckerInt(chosenAction, 3)
                 }
 
+                var afterInventoryCheck = Pair(0, EmptyEquipment("empty") as Item)
                 when(answerInt)
                 {
                     1 -> TODO() // check abilities
-                    2 -> TODO() // check inventory
+                    2 -> afterInventoryCheck = console.printInventory(game.getPlayerInventory())
                     3 -> println("leave")
+                }
+
+                when(afterInventoryCheck.first)
+                {
+                    1 -> game.removeItemFromInventory(afterInventoryCheck.second)
+                    2 -> game.useItem(afterInventoryCheck.second)
                 }
             }
             GameState.END -> continue
