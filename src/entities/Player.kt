@@ -1,7 +1,10 @@
 package entities
 
 import Direction
+import Inventory
+import PlayerEquipment
 import PlayerInfo
+import items.*
 
 class Player : Entity() {
     private var coordinates : Pair<Int, Int> = Pair(0,0)
@@ -24,7 +27,21 @@ class Player : Entity() {
 
     private var prevCoordinates = coordinates
 
-    // TODO: Inventory, Spells, Equipment, Abilities
+    // TODO: Spells, Abilities
+
+    private val inventory = Inventory()
+    private val equipment = PlayerEquipment()
+
+    fun getEquipment() = equipment
+    fun getInventoryItems() = inventory.getItems()
+
+    fun putOnEquipment(newEquipment: Equipment) : Boolean
+    {
+        val prevEquipment : Equipment = equipment.setEquipment(newEquipment) ?: return false
+        if(prevEquipment !is EmptyEquipment)
+            inventory.addItem(prevEquipment)
+        return true
+    }
 
     fun move(direction: Direction)
     {
@@ -111,4 +128,27 @@ class Player : Entity() {
     }
 
     fun died(): Boolean = isDied
+    fun removeFromInventory(item: Item) {
+        inventory.removeItem(item)
+    }
+
+    fun useItem(item: Item) {
+        if(!inventory.getItems().contains(item))
+            return
+
+        when(item)
+        {
+            is Equipment -> {
+                inventory.removeItem(item)
+                equipment.setEquipment(item)
+            }
+
+            is Misc -> {
+                inventory.removeItem(item)
+                item.remove(1)
+                if(item.getCount() > 0)
+                    inventory.addItem(item)
+            }
+        }
+    }
 }
