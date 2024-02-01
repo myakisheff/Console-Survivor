@@ -1,4 +1,5 @@
 import entities.*
+import items.Item
 
 class GameController(
     mapSize : MapSize,
@@ -52,4 +53,12 @@ class GameController(
     fun getCellInfo(cell: Pair<Int, Int>) = map.getCellInfo(cell)
     fun getPlayerInfo() = player.getInfo()
     fun getAllEntities() = map.getAllEntities(getPlayerPosition())
+    fun getPlayerInventory() = player.getInventoryItems()
+    fun removeItemFromInventory(item: Item) {
+        player.removeFromInventory(item)
+    }
+
+    fun useItem(item: Item) {
+        player.useItem(item)
+    }
 }
