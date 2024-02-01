@@ -2,7 +2,7 @@ package items
 
 interface Sellable {
     var cost : Int
-    fun setCost(price: Int) {
+    fun setNewCost(price: Int) {
         cost = price
     }
 }
