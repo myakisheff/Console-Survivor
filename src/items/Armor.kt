@@ -1,5 +1,5 @@
 package items
 
-class Armor : Equipment() {
+abstract class Armor : Equipment() {
     private var defense : Int = 0
 }
