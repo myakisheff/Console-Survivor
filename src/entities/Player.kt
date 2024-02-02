@@ -78,7 +78,7 @@ class Player : Entity() {
 
     private fun addExp(exp: Int) {
         expPoints += exp
-        if (expPoints > expPointsToUp)
+        while (expPoints > expPointsToUp)
             levelUp()
     }
 
