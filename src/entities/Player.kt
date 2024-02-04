@@ -3,7 +3,6 @@ package entities
 import Direction
 import Inventory
 import PlayerEquipment
-import PlayerInfo
 import items.*
 
 class Player : Entity() {
@@ -24,6 +23,7 @@ class Player : Entity() {
     private var manaMax : Int = 0
 
     private var isDied : Boolean = false
+    private var isDefend : Boolean = false
 
     private var prevCoordinates = coordinates
 
@@ -76,6 +76,13 @@ class Player : Entity() {
         }
     }
 
+    fun defend()
+    {
+        if(isDefend) return
+        isDefend = true
+        defense *= 2
+    }
+
     private fun addExp(exp: Int) {
         expPoints += exp
         while (expPoints > expPointsToUp)
@@ -84,9 +91,11 @@ class Player : Entity() {
 
     fun takeDamage(dmg : Int)
     {
-        healPoints -= if(dmg - defense > 0) dmg - defense else 0
+        healPoints -= if(dmg - defense > 1) dmg - defense else 1
         if(healPoints <= 0)
             isDied = true
+        isDefend = false
+        defense /= 2
     }
 
     fun setPosition(height: Int, width: Int) {
