@@ -61,4 +61,25 @@ class GameController(
     fun useItem(item: Item) {
         player.useItem(item)
     }
+
+    fun fight(battleAction: BattleAction): Pair<PlayerInfo, EnemyInfo> {
+        // return result of a fight
+
+        var isEnemyCanAttack = true
+
+        when(battleAction)
+        {
+            BattleAction.ATTACK -> player.attack(map.getEnemy(getPlayerPosition()))
+            BattleAction.DEFENSE -> player.defend()
+            BattleAction.SPELL -> TODO()
+            BattleAction.NONE -> isEnemyCanAttack = false
+        }
+
+        if(isEnemyCanAttack)
+        {
+            player.takeDamage(map.getCellEnemyInfo(getPlayerPosition()).damage.toInt())
+        }
+
+        return Pair(player.getInfo(), map.getCellEnemyInfo(getPlayerPosition()))
+    }
 }
