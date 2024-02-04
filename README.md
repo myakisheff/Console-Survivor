@@ -29,8 +29,8 @@ TODO:
    5. _List of abilities and spells_
    6. _Dying_ (✓)
    7. _Level up_ (✓)
-   8. _Inventory_
-   9. _Equipment_
+   8. _Inventory_ (✓)
+   9. _Equipment_ (✓)
    10. _Transfer of items_
 
 5. Trader
@@ -40,20 +40,20 @@ TODO:
    4. _Purchase of items_
 
 6. Items
-   1. _Cost_
-   2. _Equipment_
-      1. _Endurance_
-      2. _Type properties_
+   1. _Cost_ (✓)
+   2. _Equipment_ (✓)
+      1. _Endurance_ (✓)
+      2. _Type properties_ (✓)
    3. _Potions_
       1. _Type properties_
    4. _Misc_
 7. Equipment types
-   1. _Armor_
-      1. _Defense_
+   1. _Armor_ (✓)
+      1. _Defense_ (✓)
       2. _Special effect_
-   2. _Weapon_
-      1. _Damage Type_
-      2. _Damage_
+   2. _Weapon_ (✓)
+      1. _Damage Type_ 
+      2. _Damage_ (✓)
       3. _Special effect_
 8. Poisons types
    1. _Healing potion_
