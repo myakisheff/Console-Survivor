@@ -97,8 +97,9 @@ class ConsoleWorker {
             is Enemy -> {
                 println("Информация о монстре:")
                 println("Имя: ${cellEntity.getName()}")
-                println("Здоровье: ${cellEntity.getHP()}")
+                println("Здоровье: ${cellEntity.getHP()}/${cellEntity.getMaxHP()}")
                 println("Урон: ${cellEntity.getDamage()}")
+                println("Защита: ${cellEntity.getDefense()}")
             }
             is Resource -> {
                 println("Информация о ресурсах:")
@@ -220,6 +221,49 @@ class ConsoleWorker {
                 return Pair(2, item)
             }
             else -> return Pair(0, EmptyEquipment("empty"))
+        }
+    }
+
+    fun printBattleInfo(fight: Pair<PlayerInfo, EnemyInfo>): BattleAction {
+        val (player, enemy) = fight
+        println("Текущее состояние битвы:")
+        println("""
+        | Вы VS ${enemy.name}
+        |
+        |Ваше здоровье: ${player.healPoints}/${player.healPointsMax}
+        |Здоровье противника: ${enemy.healPoints}/${enemy.healPointsMax}
+        |
+        |Ваш урон: ${player.damage}
+        |Урон противника: ${enemy.damage}
+        |
+        |Ваша защита: ${player.defense}
+        |Защита противника: ${player.defense}
+        |
+        |Ваша мана: ${player.mana}
+        """.trimMargin())
+
+        println("""
+        |Ваши действия?
+        |1. Напасть
+        |2. Использовать заклинание
+        |3. Защищаться
+        |Напишите номер пункта:
+        """.trimMargin())
+
+        var battleAction = readln()
+        var answerInt : Int = answerCheckerInt(battleAction, 3)
+        while(answerInt == -1)
+        {
+            println("Введите корректный номер:")
+            battleAction = readln()
+            answerInt = answerCheckerInt(battleAction, 3)
+        }
+
+        return when(answerInt) {
+            1 -> BattleAction.ATTACK
+            2 -> BattleAction.SPELL
+            3 -> BattleAction.DEFENSE
+            else -> BattleAction.NONE
         }
     }
 

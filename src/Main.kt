@@ -39,7 +39,13 @@ fun main() {
         {
             GameState.MAP -> println()
             GameState.BATTLE -> {
-                console.printPlayerInfo(game.getPlayerInfo())
+
+                var battleAction : BattleAction = BattleAction.NONE
+                // Player already at the cell with enemy
+                while(game.gameState == GameState.BATTLE)
+                {
+                    battleAction = console.printBattleInfo(game.fight(battleAction))
+                }
             }
             GameState.TRADER -> TODO()
             GameState.PLAYER -> {
