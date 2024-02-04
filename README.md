@@ -52,7 +52,7 @@ TODO:
       1. _Defense_ (✓)
       2. _Special effect_
    2. _Weapon_ (✓)
-      1. _Damage Type_ 
+      1. _Damage Type_ (✓)
       2. _Damage_ (✓)
       3. _Special effect_
 8. Poisons types
