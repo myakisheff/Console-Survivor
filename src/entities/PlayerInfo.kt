@@ -1,3 +1,5 @@
+package entities
+
 data class PlayerInfo(
     val level : String,
     val expPoints : String,
