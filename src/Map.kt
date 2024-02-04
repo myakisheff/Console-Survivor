@@ -139,4 +139,24 @@ class Map (
 
     fun getCellInfo(cell: Pair<Int, Int>) = getCell(cell).getMainEntity()
     fun getAllEntities(cell: Pair<Int, Int>) = map[cell.first][cell.second].getAllEntities()
+    fun getCellEnemyInfo(pos : Pair<Int, Int>): EnemyInfo {
+
+        if(map[pos.first][pos.second].getMainEntity() !is Enemy)
+            return EnemyInfo.noEnemy()
+        val enemy = (map[pos.first][pos.second].getMainEntity() as Enemy)
+        return EnemyInfo(
+            name = enemy.getName(),
+            healPoints = enemy.getHP().toString(),
+            healPointsMax = enemy.getMaxHP().toString(),
+            damage = enemy.getDamage().toString(),
+            defense = enemy.getDefense().toString()
+        )
+    }
+
+    fun getEnemy(pos: Pair<Int, Int>) : Enemy {
+        if(map[pos.first][pos.second].getMainEntity() !is Enemy)
+            return Enemy("No Enemy")
+
+        return (map[pos.first][pos.second].getMainEntity() as Enemy)
+    }
 }
