@@ -5,6 +5,7 @@ class Enemy(
 ) : Entity()
 {
     private var healPoints : Int = 100
+    private var healPointsMax : Int = 100
     private val damage : Int = 1
     private var defense : Int = 5
     private var isDied : Boolean = false
@@ -17,7 +18,9 @@ class Enemy(
     }
 
     fun getHP() : Int = healPoints
+    fun getMaxHP() : Int = healPointsMax
     fun getDamage() : Int = damage
+    fun getDefense() : Int = defense
     fun isDied() : Boolean = isDied
     fun getName() : String = name
     fun getExp() : Int {
